@@ -28,10 +28,10 @@ def webhook():
 				    "google": {
 				      "expectUserResponse": True,
 				      "systemIntent": {
-				        "intent": "actions.intent.PERMISSION",
+				        "intent": "actions.intent.CONFIGURE_UPDATES",
 				        "data": {
 				          "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
-				          "optContext": "To deliver your order",
+				          "optContext": "To send you reminder",
 				          "permissions": [
 				            "NAME"
 				          ]
