@@ -8,6 +8,7 @@ app = Flask(__name__)
 @app.route('/', methods=['POST'])
 def webhook():
 	req_data = request.get_json()
+	print("************ REQUEST DATA **********")
 	print(req_data)
 	pnr_number = 0
 
@@ -20,7 +21,25 @@ def webhook():
 	if pnr_number != 0:
 		pnr_number_str = str(pnr_number)
 		if len(pnr_number_str) != 10:
-			return jsonify(fulfillmentText="PNR Number has to be of 10 digits")
+			#return jsonify(fulfillmentText="PNR Number has to be of 10 digits")
+			return jsonify(
+				{
+				  "payload": {
+				    "google": {
+				      "expectUserResponse": True,
+				      "systemIntent": {
+				        "intent": "actions.intent.PERMISSION",
+				        "data": {
+				          "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
+				          "optContext": "To deliver your order",
+				          "permissions": [
+				            "NAME"
+				          ]
+				        }
+				      }
+				    }
+				  }
+				})
 		else:
 			p = pnrapi.PNRAPI(pnr_number_str) #10-digit PNR Number
 			start = time.time()
