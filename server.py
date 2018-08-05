@@ -24,21 +24,13 @@ def webhook():
 			#return jsonify(fulfillmentText="PNR Number has to be of 10 digits")
 			return jsonify(
 				{
-				  "payload": {
-				    "google": {
-				      "expectUserResponse": True,
-				      "systemIntent": {
-				        "intent": "actions.intent.CONFIGURE_UPDATES",
-				        "data": {
-				          "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
-				          "optContext": "To send you reminder",
-				          "permissions": [
-				            "NAME"
-				          ]
-				        }
-				      }
-				    }
-				  }
+					"followupEventInput": {
+					    "name": "event name",
+					    "languageCode": "en-US",
+					    "parameters": {
+					      "param": "param value"
+					    }
+					  }
 				})
 		else:
 			p = pnrapi.PNRAPI(pnr_number_str) #10-digit PNR Number
