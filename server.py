@@ -24,6 +24,7 @@ def webhook():
 			#return jsonify(fulfillmentText="PNR Number has to be of 10 digits")
 			return jsonify(
 				{
+					"fulfillmentText": "This is a text response",
 					"followupEventInput": {
 					    "name": "actions_intent_CONFIGURE_UPDATES",
 					    "languageCode": "en-US"
