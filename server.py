@@ -12,7 +12,7 @@ def webhook():
 	print(req_data)
 	pnr_number = 0
 
-	if req_data['queryResult']['intent']['displayName'] == "pnr number":
+	if req_data['queryResult']['intent']['displayName'] == "pnr_number":
 		try:
 			pnr_number = int(req_data['queryResult']['parameters']['number'])
 		except Exception as e:
@@ -25,11 +25,8 @@ def webhook():
 			return jsonify(
 				{
 					"followupEventInput": {
-					    "name": "event name",
-					    "languageCode": "en-US",
-					    "parameters": {
-					      "param": "param value"
-					    }
+					    "name": "actions_intent_CONFIGURE_UPDATES",
+					    "languageCode": "en-US"
 					  }
 				})
 		else:
