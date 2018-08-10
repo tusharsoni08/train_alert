@@ -5,7 +5,7 @@ from redis import Redis
 from rq import Queue
 
 app = Flask(__name__)
-queue = Queue(connection=Redis())
+queue = Queue(connection=Redis.from_url('redis://'))
 
 @app.route('/', methods=['POST'])
 def webhook():
@@ -30,7 +30,6 @@ def webhook():
 		if req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['textValue'] == 'true':
 			job = queue.enqueue(processDetails, req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
 			print(job.get_id())
-			print("*************")
 			return endConversation()
 			#return processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
 
@@ -50,6 +49,9 @@ def webhook():
 				if req_data['originalDetectIntentRequest']['payload']['user']['permissions'] is not None:
 					isPermission = True
 					#check does this user in db, Yes->exit/No->continue
+					job = queue.enqueue(processDetails, req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
+					print(job.get_id())
+					return endConversation()
 			except Exception as e:
 				return askForPermission()
 			
