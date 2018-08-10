@@ -5,7 +5,7 @@ from redis import Redis
 from rq import Queue
 
 app = Flask(__name__)
-queue = Queue(connection=Redis.from_url('redis://'))
+queue = Queue(connection=Redis())
 
 @app.route('/', methods=['POST'])
 def webhook():
