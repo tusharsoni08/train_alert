@@ -1,11 +1,8 @@
 from flask import Flask, request, jsonify
 from scripts import pnrapi
 import time
-from redis import Redis
-from rq import Queue
 
 app = Flask(__name__)
-queue = Queue(connection=Redis())
 
 @app.route('/', methods=['POST'])
 def webhook():
@@ -28,10 +25,7 @@ def webhook():
 	if permissionIntent:
 		#when user accepted permission
 		if req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['textValue'] == 'true':
-			job = queue.enqueue(processDetails, req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
-			print(job.get_id())
-			return endConversation()
-			#return processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
+			return processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
 
 		#when user declined permission
 		if req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['textValue'] == 'false':
@@ -46,13 +40,13 @@ def webhook():
 			#verify for update permission
 			isPermission = False
 			try:
+				#PNR request with permission
 				if req_data['originalDetectIntentRequest']['payload']['user']['permissions'] is not None:
 					isPermission = True
 					#check does this user in db, Yes->exit/No->continue
-					job = queue.enqueue(processDetails, req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
-					print(job.get_id())
-					return endConversation()
+					return processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
 			except Exception as e:
+				#PNR request without permission
 				return askForPermission()
 			
 	else:
