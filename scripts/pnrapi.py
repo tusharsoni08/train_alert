@@ -21,12 +21,12 @@ class PNRAPI:
 		try:
 			page = urllib2.urlopen(self.url_pnr + self.pnr)
 			soup = BeautifulSoup(page, 'html.parser')
-			pnr_data = soup.find('div', attrs={'class': 'pnr-search-result-info'}).text.split('\n\n')
+			pnr_data = soup.find('div', attrs={'class': 'pnr-search-result-info'})
 			
 			if pnr_data is None:
 				return False
 			
-			return self.set_pnr_details(pnr_data)
+			return self.set_pnr_details(pnr_data.text.split('\n\n'))
 		except urllib2.HTTPError as err:
 			print(err)
 			return False
@@ -79,15 +79,15 @@ class PNRAPI:
 				soup = BeautifulSoup(page, 'html.parser')
 
 				#remaining KMs to arrive and status of train at destination station
-				remaining_dist = soup.find('span', attrs={'class': 'kilometers'}).text.strip()
-				train_status = soup.find('td', attrs={'id': 'qrdPosSttsMsg'}).text.split('\n')[1]
+				remaining_dist = soup.find('span', attrs={'class': 'kilometers'})
+				train_status = soup.find('td', attrs={'id': 'qrdPosSttsMsg'})
 				
 				if train_status is None or remaining_dist is None:
 					return False
 
 				#check status and it should be "Yet to arrive"
-				if train_status != "" and train_status.strip().lower() == "Yet to arrive".lower():
-					self.response_json["remaining_dist"] = int(remaining_dist)
+				if train_status.text.split('\n')[1].strip().lower() == "Yet to arrive".lower():
+					self.response_json["remaining_dist"] = int(remaining_dist.text.strip())
 					return True
 
 				return None

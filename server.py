@@ -29,7 +29,7 @@ def webhook():
 			
 		#when user declined permission
 		if req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['textValue'] == 'false':
-			return endConversation()
+			return endConversation("No problem! see you next time.")
 
 	if pnr_number != 0:
 		pnr_number_str = str(pnr_number)
@@ -73,7 +73,7 @@ def askForPermission():
 		})
 
 
-def endConversation():
+def endConversation(end_msg):
 	return jsonify({
 			   "payload":{
 			      "google":{
@@ -82,7 +82,7 @@ def endConversation():
 			            "items":[
 			               {
 			                  "simpleResponse":{
-			                     "textToSpeech":"No problem! see you next time."
+			                     "textToSpeech": end_msg
 			                  }
 			               }
 			            ]
@@ -100,13 +100,13 @@ def processDetails(pnr):
 
 	if response_status == True:
 		print("Okay, I've set the reminder")
-		return jsonify(fulfillmentText="Okay, I've set the reminder")
+		return endConversation("Okay, I've set the reminder.")
 	elif response_status == None:
 		print("Sorry, your train has departed")
-		return jsonify(fulfillmentText="Sorry, your train has departed")
+		return endConversation("Sorry, your train has departed.")
 	else:
 		print("Currently service unavailable. Try again soon")
-		return jsonify(fulfillmentText="Currently service unavailable. Try again soon")
+		return endConversation("Currently service unavailable. Try again soon.")
 
 
 if __name__ == '__main__':
