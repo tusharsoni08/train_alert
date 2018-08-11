@@ -6,6 +6,7 @@ import os
 class CloudFireStoreDB:
 
 	def __init__(self, json={}):
+		print('***** This is Firestore ****')
 		#Initialize Cloud Firestore on server
 		if (not len(firebase_admin._apps)):
 			cred = credentials.Certificate({
@@ -28,6 +29,7 @@ class CloudFireStoreDB:
 		self.set_data()
 
 	def set_data(self):
+		print('setting data #####')
 		db = firestore.client()
 		doc_ref = db.collection(u'users').document(u'user_1')
 		doc_ref.set({

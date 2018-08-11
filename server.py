@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from scripts import pnrapi
 import time
+import re
 
 app = Flask(__name__)
 
@@ -34,7 +35,26 @@ def webhook():
 	if pnr_number != 0:
 		pnr_number_str = str(pnr_number)
 		if len(pnr_number_str) != 10:
-			return jsonify(fulfillmentText="PNR Number has to be of 10 digits")
+			pnr_query = req_data['originalDetectIntentRequest']['payload']['inputs'][0]
+			if pnr_query['intent'] == 'actions.intent.TEXT':
+				text_data = pnr_query['arguments'][0]['textValue']
+				query_str = text_data.replace(" ", "")
+
+				numRegex = re.compile(r'\d{10}')
+				matched_result = numRegex.search(query_str)
+				isExpected = True
+
+				if matched_result is not None:
+					pnr_number_str = matched_result.group()
+					n = query_str.index(pnr_number_str) + len(pnr_number_str)
+					if n-1 < len(query_str)-1:
+						if query_str[n].isdigit():
+							isExpected = False
+
+				if len(pnr_number_str) == 10 and isExpected:
+					return processDetails(pnr_number_str)
+				else:
+					return jsonify(fulfillmentText="PNR Number has to be of 10 digits")
 		else:
 			
 			#verify for update permission

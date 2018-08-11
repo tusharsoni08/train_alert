@@ -104,7 +104,7 @@ class PNRAPI:
 	def find_arrival_date(self):
 		boarding_date = datetime.strptime(self.response_json["boarding_date"] + " " + self.response_json["start_time"], "%d-%m-%Y %I:%M %p")
 		journey_time = self.response_json["journey_time"].split(" ")
-		numRegex = re.compile('\d+')
+		numRegex = re.compile(r'\d+')
 		journey_hrs = numRegex.search(journey_time[0]).group()
 		journey_min = numRegex.search(journey_time[1]).group()
 		arrival_date = boarding_date + timedelta(minutes=int(journey_min), hours=int(journey_hrs))
