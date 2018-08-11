@@ -88,6 +88,7 @@ class PNRAPI:
 				#check status and it should be "Yet to arrive"
 				if train_status.text.split('\n')[1].strip().lower() == "Yet to arrive".lower():
 					self.response_json["remaining_dist"] = int(remaining_dist.text.strip())
+					firestore.CloudFireStoreDB(self.get_json())
 					return True
 
 				return None
@@ -95,7 +96,6 @@ class PNRAPI:
 				print(err)
 				return False
 
-			firestore.CloudFireStoreDB(self.get_json())
 		except Exception as e:
 			print(e)
 			return False
