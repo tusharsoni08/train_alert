@@ -25,8 +25,8 @@ def webhook():
 	if permissionIntent:
 		#when user accepted permission
 		if req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['textValue'] == 'true':
-			processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
-
+			return processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
+			
 		#when user declined permission
 		if req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['textValue'] == 'false':
 			return endConversation()
@@ -38,13 +38,11 @@ def webhook():
 		else:
 			
 			#verify for update permission
-			isPermission = False
 			try:
 				#PNR request with permission
 				if req_data['originalDetectIntentRequest']['payload']['user']['permissions'] is not None:
-					isPermission = True
 					#check does this user in db, Yes->exit/No->continue
-					processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
+					return processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
 			except Exception as e:
 				#PNR request without permission
 				return askForPermission()

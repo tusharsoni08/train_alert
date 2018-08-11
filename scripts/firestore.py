@@ -32,7 +32,6 @@ class CloudFireStoreDB:
 		doc_ref = db.collection(u'users').document(u'user_1')
 		doc_ref.set({
 		    u'station_name': self.json_data["station_name"],
-		    u'pf': self.json_data["pf"],
 		    u'remaining_dist': self.json_data["remaining_dist"]
 		})
 
