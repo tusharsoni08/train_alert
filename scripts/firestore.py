@@ -25,17 +25,21 @@ class CloudFireStoreDB:
 				
 		self.json_data = json
 		self.userId = userId
-		print("\nIN Firestore")
+
 		print(self.json_data)
 		self.set_data()
 
 	def set_data(self):
-		print('setting data #####')
 		db = firestore.client()
 		doc_ref = db.collection(u'users').document(self.userId)
 		doc_ref.set({
+			u'user_id': self.userId,
+			u'train_number': self.response_json["train_number"],
 		    u'station_name': self.json_data["station_name"],
-		    u'remaining_dist': self.json_data["remaining_dist"]
+		    u'station_code': self.response_json["station_code"],
+		    u'remaining_dist': self.json_data["remaining_dist"],
+		    u'arrival_date': self.response_json['arrival_date_formatted'],
+		    u'boarding_date': self.response_json['boarding_date_formatted']
 		})
 
 	def get_data(self):
