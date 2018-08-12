@@ -26,7 +26,8 @@ def webhook():
 	if permissionIntent:
 		#when user accepted permission
 		if req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['textValue'] == 'true':
-			return processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
+			return processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'],
+									req_data['originalDetectIntentRequest']['payload']['user']['userId'])
 			
 		#when user declined permission
 		if req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['textValue'] == 'false':
@@ -52,7 +53,7 @@ def webhook():
 							isExpected = False
 
 				if len(pnr_number_str) == 10 and isExpected:
-					return processDetails(pnr_number_str)
+					return processDetails(pnr_number_str, req_data['originalDetectIntentRequest']['payload']['user']['userId'])
 				else:
 					return jsonify(fulfillmentText="PNR Number has to be of 10 digits")
 		else:
@@ -62,7 +63,8 @@ def webhook():
 				#PNR request with permission
 				if req_data['originalDetectIntentRequest']['payload']['user']['permissions'] is not None:
 					#check does this user in db, Yes->exit/No->continue
-					return processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'])
+					return processDetails(req_data['queryResult']['outputContexts'][0]['parameters']['number.original'],
+											req_data['originalDetectIntentRequest']['payload']['user']['userId'])
 			except Exception as e:
 				#PNR request without permission
 				return askForPermission()
@@ -112,8 +114,8 @@ def endConversation(end_msg):
 			})
 
 
-def processDetails(pnr):
-	p = pnrapi.PNRAPI(pnr) #10-digit PNR Number
+def processDetails(pnr, userId):
+	p = pnrapi.PNRAPI(pnr, userId) #10-digit PNR Number
 	start = time.time()
 	response_status = p.request()
 	print(time.time() - start)

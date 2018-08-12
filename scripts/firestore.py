@@ -5,7 +5,7 @@ import os
 
 class CloudFireStoreDB:
 
-	def __init__(self, json={}):
+	def __init__(self, json, userId):
 		print('***** This is Firestore ****')
 		#Initialize Cloud Firestore on server
 		if (not len(firebase_admin._apps)):
@@ -24,14 +24,15 @@ class CloudFireStoreDB:
 			default_app = firebase_admin.initialize_app(cred)
 				
 		self.json_data = json
+		self.userId = userId
 		print("\nIN Firestore")
 		print(self.json_data)
-		self.set_data()
+		self.set_data(userId)
 
 	def set_data(self):
 		print('setting data #####')
 		db = firestore.client()
-		doc_ref = db.collection(u'users').document(u'user_1')
+		doc_ref = db.collection(u'users').document(self.userId)
 		doc_ref.set({
 		    u'station_name': self.json_data["station_name"],
 		    u'remaining_dist': self.json_data["remaining_dist"]

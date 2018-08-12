@@ -8,12 +8,13 @@ from bs4 import BeautifulSoup
 
 class PNRAPI:
 		
-	def __init__(self,pnr=""):
+	def __init__(self, pnr, userId):
 		self.response_json = {}
 
 		self.url_pnr = "https://www.railyatri.in/pnr-status/"
 		self.url_train_spot = "https://enquiry.indianrail.gov.in/xyzabc/SelectedDateOfTrain?trainNo="
 		self.pnr = pnr
+		self.userId = userId
 
 
 	def request(self):
@@ -88,7 +89,7 @@ class PNRAPI:
 				#check status and it should be "Yet to arrive"
 				if train_status.text.split('\n')[1].strip().lower() == "Yet to arrive".lower():
 					self.response_json["remaining_dist"] = int(remaining_dist.text.strip())
-					firestore.CloudFireStoreDB(self.get_json())
+					firestore.CloudFireStoreDB(self.get_json(), self.userId)
 					return True
 
 				return None
