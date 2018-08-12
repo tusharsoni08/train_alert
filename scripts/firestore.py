@@ -27,7 +27,7 @@ class CloudFireStoreDB:
 		self.userId = userId
 		print("\nIN Firestore")
 		print(self.json_data)
-		self.set_data(userId)
+		self.set_data()
 
 	def set_data(self):
 		print('setting data #####')
