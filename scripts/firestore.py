@@ -34,12 +34,12 @@ class CloudFireStoreDB:
 		doc_ref = db.collection(u'users').document(self.userId)
 		doc_ref.set({
 			u'user_id': self.userId,
-			u'train_number': self.response_json["train_number"],
+			u'train_number': self.json_data["train_number"],
 		    u'station_name': self.json_data["station_name"],
-		    u'station_code': self.response_json["station_code"],
+		    u'station_code': self.json_data["station_code"],
 		    u'remaining_dist': self.json_data["remaining_dist"],
-		    u'arrival_date': self.response_json['arrival_date_formatted'],
-		    u'boarding_date': self.response_json['boarding_date_formatted']
+		    u'arrival_date': self.json_data['arrival_date_formatted'],
+		    u'boarding_date': self.json_data['boarding_date_formatted']
 		})
 
 	def get_data(self):
