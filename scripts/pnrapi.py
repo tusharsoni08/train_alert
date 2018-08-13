@@ -111,7 +111,6 @@ class PNRAPI:
 		journey_hrs = numRegex.search(journey_time[0]).group()
 		journey_min = numRegex.search(journey_time[1]).group()
 		arrival_date = boarding_date + timedelta(minutes=int(journey_min), hours=int(journey_hrs))
-		self.response_json["arrival_date"] = arrival_date
 		return arrival_date
 
 

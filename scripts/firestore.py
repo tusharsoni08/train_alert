@@ -29,11 +29,11 @@ class CloudFireStoreDB:
 		print(self.json_data)
 		self.set_data()
 
+
 	def set_data(self):
 		db = firestore.client()
 		doc_ref = db.collection(u'users').document(self.userId)
 		doc_ref.set({
-			u'user_id': self.userId,
 			u'train_number': self.json_data["train_number"],
 		    u'station_name': self.json_data["station_name"],
 		    u'station_code': self.json_data["station_code"],
@@ -41,23 +41,3 @@ class CloudFireStoreDB:
 		    u'arrival_date': self.json_data['arrival_date_formatted'],
 		    u'boarding_date': self.json_data['boarding_date_formatted']
 		})
-
-	def get_data(self):
-		db = firestore.client()
-		doc_ref = db.collection(u'users').document(u'user_1')
-		try:
-			doc = doc_ref.get()
-			print(u'Document data: {}'.format(doc.to_dict()))
-		except google.cloud.exceptions.NotFound:
-			print(u'No such document!')
-
-'''
-
-
-
-users_ref = db.collection(u'users')
-docs = users_ref.get()
-
-for doc in docs:
-    print(u'{} => {}'.format(doc.id, doc.to_dict()))
-'''
