@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/', methods=['POST'])
 def webhook():
 	req_data = request.get_json()
-	print("\n************ REQUEST DATA **********")
+	print("\n************ DialogFlow Request Data **********")
 	print(req_data)
 	pnr_number = 0
 
@@ -121,13 +121,16 @@ def processDetails(pnr, userId):
 	print(time.time() - start)
 
 	if response_status == True:
-		print("Okay, I've set the reminder")
-		return endConversation("Okay, I've set the reminder.")
+		print("Okay, I've set the reminder. Enjoy your journey!")
+		return endConversation("Okay, I've set the reminder. Enjoy your journey!")
 	elif response_status == None:
-		print("Sorry, your train has departed")
-		return endConversation("Sorry, your train has departed.")
+		print("Sorry, your train has departed from your destination station.")
+		return endConversation("Sorry, your train has departed from your destination station.")
+	elif response_status == 'Not Found':
+		print("Sorry, your PNR number has been expired.")
+		return endConversation("Sorry, your PNR number has been expired.")
 	else:
-		print("Currently service unavailable. Try again soon")
+		print("Currently service unavailable. Try again soon.")
 		return endConversation("Currently service unavailable. Try again soon.")
 
 

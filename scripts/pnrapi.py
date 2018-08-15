@@ -25,7 +25,7 @@ class PNRAPI:
 			pnr_data = soup.find('div', attrs={'class': 'pnr-search-result-info'})
 			
 			if pnr_data is None:
-				return False
+				return 'Not Found'
 			
 			return self.set_pnr_details(pnr_data.text.split('\n\n'))
 		except urllib2.HTTPError as err:
@@ -87,8 +87,10 @@ class PNRAPI:
 				remaining_dist = soup.find('span', attrs={'class': 'kilometers'})
 				train_status = soup.find('td', attrs={'id': 'qrdPosSttsMsg'})
 				
-				if train_status is None or remaining_dist is None:
+				if train_status is None:
 					return False
+				elif remaining_dist is None and train_status.text.split('\n')[1].strip().lower() == "Reached destination".lower():
+					return None
 
 				#check status and it should be "Yet to arrive"
 				if train_status.text.split('\n')[1].strip().lower() == "Yet to arrive".lower():
@@ -117,5 +119,4 @@ class PNRAPI:
 
 
 	def get_json(self):
-		print(self.response_json)
 		return self.response_json

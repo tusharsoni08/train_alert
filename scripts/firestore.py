@@ -6,7 +6,6 @@ import os
 class CloudFireStoreDB:
 
 	def __init__(self, json, userId):
-		print('***** This is Firestore ****')
 		#Initialize Cloud Firestore on server
 		if (not len(firebase_admin._apps)):
 			cred = credentials.Certificate({
