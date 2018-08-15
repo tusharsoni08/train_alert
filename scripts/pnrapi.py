@@ -11,8 +11,8 @@ class PNRAPI:
 	def __init__(self, pnr, userId):
 		self.response_json = {}
 
-		self.url_pnr = "https://www.railyatri.in/pnr-status/"
-		self.url_train_spot = "https://enquiry.indianrail.gov.in/xyzabc/SelectedDateOfTrain?trainNo="
+		self.url_pnr = os.environ.get('PNR_URL')
+		self.url_train_spot = os.environ.get('ENQUIRY_URL')
 		self.pnr = pnr
 		self.userId = userId
 
