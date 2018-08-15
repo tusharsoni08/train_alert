@@ -69,10 +69,12 @@ class PNRAPI:
 	def fetch_running_status(self):
 		try:
 			exp_arrival_date = self.find_arrival_date()
-			arrival_date_formatted = datetime.strptime(str(exp_arrival_date), '%Y-%m-%d  %H:%M:%S').strftime('%d/%m/%Y')
-			boarding_date_formatted = datetime.strptime(self.response_json["boarding_date"], '%d-%m-%Y').strftime('%d/%m/%Y')
-			self.response_json['arrival_date_formatted'] = arrival_date_formatted
-			self.response_json['boarding_date_formatted'] = boarding_date_formatted
+			arr_date = datetime.strptime(str(exp_arrival_date), '%Y-%m-%d  %H:%M:%S')
+			bord_date = datetime.strptime(self.response_json["boarding_date"], '%d-%m-%Y')
+			arrival_date_formatted = arr_date.strftime('%d/%m/%Y')
+			boarding_date_formatted = bord_date.strftime('%d/%m/%Y')
+			self.response_json['arrival_date'] = arr_date
+			self.response_json['boarding_date'] = bord_date
 
 			url = self.url_train_spot + self.response_json["train_number"] + "&startDate=" + boarding_date_formatted + "&journeyStn=" + self.response_json["station_code"] + "&journeyDate=" + arrival_date_formatted + "&boardDeboard=0&langFile=props.en-us"
 			#url = self.url_train_spot + self.response_json["train_number"] + "&journeyStn=" + self.response_json["station_code"] + "&langFile=props.en-us"

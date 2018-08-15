@@ -38,6 +38,6 @@ class CloudFireStoreDB:
 		    u'station_name': self.json_data["station_name"],
 		    u'station_code': self.json_data["station_code"],
 		    u'remaining_dist': self.json_data["remaining_dist"],
-		    u'arrival_date': self.json_data['arrival_date_formatted'],
-		    u'boarding_date': self.json_data['boarding_date_formatted']
+		    u'arrival_date': self.json_data['arrival_date'],
+		    u'boarding_date': self.json_data['boarding_date']
 		})
