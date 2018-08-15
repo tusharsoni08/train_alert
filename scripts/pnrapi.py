@@ -73,8 +73,7 @@ class PNRAPI:
 			bord_date = datetime.strptime(self.response_json["boarding_date"], '%d-%m-%Y')
 			arrival_date_formatted = arr_date.strftime('%d/%m/%Y')
 			boarding_date_formatted = bord_date.strftime('%d/%m/%Y')
-			self.response_json['arrival_date'] = arr_date
-			self.response_json['boarding_date'] = bord_date
+			
 
 			url = self.url_train_spot + self.response_json["train_number"] + "&startDate=" + boarding_date_formatted + "&journeyStn=" + self.response_json["station_code"] + "&journeyDate=" + arrival_date_formatted + "&boardDeboard=0&langFile=props.en-us"
 			#url = self.url_train_spot + self.response_json["train_number"] + "&journeyStn=" + self.response_json["station_code"] + "&langFile=props.en-us"
@@ -113,6 +112,8 @@ class PNRAPI:
 		journey_hrs = numRegex.search(journey_time[0]).group()
 		journey_min = numRegex.search(journey_time[1]).group()
 		arrival_date = boarding_date + timedelta(minutes=int(journey_min), hours=int(journey_hrs))
+		self.response_json['arrival_date'] = arrival_date
+		self.response_json['boarding_date'] = boarding_date
 		return arrival_date
 
 
