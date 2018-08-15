@@ -89,8 +89,6 @@ class PNRAPI:
 				
 				if train_status is None:
 					return False
-				elif remaining_dist is None and train_status.text.split('\n')[1].strip().lower() == "Reached destination".lower():
-					return None
 
 				#check status and it should be "Yet to arrive"
 				if train_status.text.split('\n')[1].strip().lower() == "Yet to arrive".lower():
