@@ -18,6 +18,7 @@ class PNRAPI:
 
 
 	def request(self):
+		print("Requesting URLs...")
 		# Search for details related PNR
 		try:
 			page = urllib2.urlopen(self.url_pnr + self.pnr)
@@ -34,7 +35,7 @@ class PNRAPI:
 
 
 	def set_pnr_details(self, pnr_data):
-		
+		print("Setting PNR Details...")
 		#set pnr
 		self.response_json["pnr"] = self.pnr
 		
@@ -63,12 +64,11 @@ class PNRAPI:
 		time_info = pnr_data[5].split('\n')
 		self.response_json["journey_time"] = time_info[2] + time_info[3]
 
-		print(self.response_json)
-
 		return self.fetch_running_status()
 
 
 	def fetch_running_status(self):
+		print("Fetching running status...")
 		try:
 			exp_arrival_date = self.find_arrival_date()
 			arrival_date_formatted = datetime.strptime(str(exp_arrival_date), '%Y-%m-%d  %H:%M:%S').strftime('%d/%m/%Y')
@@ -76,9 +76,6 @@ class PNRAPI:
 
 			self.response_json["arrival_date"] = unicode(arrival_date_formatted, "utf-8")
 			self.response_json["boarding_date"] = unicode(boarding_date_formatted, "utf-8")
-
-			print("#### JSON ####")
-			print(self.response_json)
 
 			url = self.url_train_spot + self.response_json["train_number"] + "&startDate=" + boarding_date_formatted + "&journeyStn=" + self.response_json["station_code"] + "&journeyDate=" + arrival_date_formatted + "&boardDeboard=0&langFile=props.en-us"
 			#url = self.url_train_spot + self.response_json["train_number"] + "&journeyStn=" + self.response_json["station_code"] + "&langFile=props.en-us"
@@ -97,6 +94,7 @@ class PNRAPI:
 				#check status and it should be "Yet to arrive"
 				if train_status.text.split('\n')[1].strip().lower() == "Yet to arrive".lower():
 					self.response_json["remaining_dist"] = int(remaining_dist.text.strip())
+					print("Storing data in firestore...")
 					firestore.CloudFireStoreDB(self.get_json(), self.userId)
 					return True
 

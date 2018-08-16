@@ -22,7 +22,8 @@ def webhook():
 
 	#accept/decline request for push notification
 	permissionIntent = (req_data['queryResult']['action'] == 'actions.intent.PERMISSION'
-		and req_data['queryResult']['intent']['displayName'] == "notification_station")
+		and req_data['queryResult']['intent']['displayName'] == "notification_station"
+		and req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['name'] == "PERMISSION")
 	if permissionIntent:
 		#when user accepted permission
 		if req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['textValue'] == 'true':
@@ -128,7 +129,7 @@ def processDetails(pnr, userId):
 		return endConversation("Sorry, your train has departed from your destination station.")
 	elif response_status == 'Not Found':
 		print("Sorry, your PNR number has been expired.")
-		return endConversation("Sorry, your PNR number has been expired.")
+		return endConversation("Sorry, your PNR number has been expired. This happens for PNR that have the date of departure 7 days ago.")
 	else:
 		print("Currently service unavailable. Try again soon.")
 		return endConversation("Currently service unavailable. Try again soon.")
