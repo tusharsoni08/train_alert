@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from scripts import pnrapi
-import time
+import time, datetime
 import re
 
 app = Flask(__name__)
@@ -134,11 +134,22 @@ def processDetails(pnr, userId):
 		print("Sorry, your train has departed from your destination station.")
 		return endConversation("Sorry, your train has departed from your destination station.")
 	elif response_status == 'Not Found':
-		print("Sorry, your PNR number has been expired.")
-		return endConversation("Sorry, your PNR number has been expired. This happens for PNR that have the date of departure 7 days ago.")
+		return currentISTTimeInUTC()
 	else:
 		print("Currently service unavailable. Try again soon.")
 		return endConversation("Currently service unavailable. Try again soon.")
+
+
+def currentISTTimeInUTC():
+	now_time = datetime.datetime.utcnow().time()
+	start = datetime.time(18, 00)
+	end = datetime.time(19, 00)
+	if now_time >= start and now_time <= end:
+	    print("Currently service unavailable. Indian Railway network is down from 11:30PM to 12:30AM")
+	    return endConversation("Currently service unavailable. Indian Railway network is down from 11:30PM to 12:30AM")
+	else:
+	    print("Sorry, your PNR number might be expired.")
+	    return endConversation("Sorry, your PNR number might be expired.")
 
 
 if __name__ == '__main__':
