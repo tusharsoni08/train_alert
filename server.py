@@ -129,7 +129,7 @@ def processDetails(pnr, userId):
 
 	if response_status == True:
 		print("Okay, I've set the reminder. Enjoy your journey!")
-		return endConversation("Okay, I've set the reminder. Enjoy your journey!")
+		return endConversation("Okay, I've set the reminder and will send you a push notification before your train reaches the destination station. Enjoy your journey!")
 	elif response_status == None:
 		print("Sorry, your train has departed from your destination station.")
 		return endConversation("Sorry, your train has departed from your destination station.")
