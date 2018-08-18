@@ -21,14 +21,14 @@ def webhook():
 			pass
 
 	#when user tap on notification
-	updatePermission = (req_data['queryResult']['intent']['displayName'] == "notification_station"
+	updatePermission = (req_data['queryResult']['intent']['displayName'] == "notification_alert"
 		and req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['name'] == "UPDATES")
 	if updatePermission:
 		return endConversation("Thanks for using Train Alarm, Hope to see you back soon!")
 
 	#accept/decline request for push notification
 	permissionIntent = (req_data['queryResult']['action'] == 'actions.intent.PERMISSION'
-		and req_data['queryResult']['intent']['displayName'] == "notification_station"
+		and req_data['queryResult']['intent']['displayName'] == "notification_alert"
 		and req_data['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'][0]['name'] == "PERMISSION")
 	if permissionIntent:
 		#when user accepted permission
@@ -93,7 +93,7 @@ def askForPermission():
 		                        "UPDATE"
 		                    ],
 		                    "updatePermissionValueSpec":{
-		                        "intent":"notification_station"
+		                        "intent":"notification_alert"
 		                    }
 		                }
 		            }
