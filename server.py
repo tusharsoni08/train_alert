@@ -129,7 +129,7 @@ def processDetails(pnr, userId):
 
 	if response_status == True:
 		print("Okay, I've set the reminder. Enjoy your journey!")
-		return endConversation("Okay, I've set the reminder and will send you a push notification before your train reaches the destination station. Enjoy your journey!")
+		return endConversation("Okay, I'll remind you before your train reaches the destination station. Enjoy your journey!")
 	elif response_status == None:
 		print("Sorry, your train has departed from your destination station.")
 		return endConversation("Sorry, your train has departed from your destination station.")
@@ -145,8 +145,8 @@ def currentISTTimeInUTC():
 	start = datetime.time(18, 00)
 	end = datetime.time(19, 00)
 	if now_time >= start and now_time <= end:
-	    print("Currently service unavailable. Indian Railway network is down from 11:30PM to 12:30AM")
-	    return endConversation("Currently service unavailable. Indian Railway network is down from 11:30PM to 12:30AM")
+	    print("Currently service unavailable. Indian Railway network is down from 11:30PM to 12:30AM.")
+	    return endConversation("Currently service unavailable. Indian Railway network is down from 11:30PM to 12:30AM.")
 	else:
 	    print("Sorry, your PNR number might be expired.")
 	    return endConversation("Sorry, your PNR number might be expired.")
