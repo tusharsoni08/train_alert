@@ -149,7 +149,7 @@ def currentISTTimeInUTC():
 	    return endConversation("Currently service unavailable. Indian Railway network is down from 11:30PM to 12:30AM.")
 	else:
 	    print("Sorry, your PNR number might be expired.")
-	    return endConversation("Sorry, your PNR number might be expired.")
+	    return endConversation("Sorry, either your PNR number might be expired or you can try again.")
 
 
 if __name__ == '__main__':
