@@ -25,7 +25,6 @@ class CloudFireStoreDB:
 		self.json_data = json
 		self.userId = userId
 
-		print(self.json_data)
 		self.set_data()
 
 

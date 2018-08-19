@@ -76,7 +76,7 @@ class PNRAPI:
 
 			self.response_json["arrival_date"] = unicode(arrival_date_formatted, "utf-8")
 			self.response_json["boarding_date"] = unicode(boarding_date_formatted, "utf-8")
-
+			print(self.response_json)
 			url = self.url_train_spot + self.response_json["train_number"] + "&startDate=" + boarding_date_formatted + "&journeyStn=" + self.response_json["station_code"] + "&journeyDate=" + arrival_date_formatted + "&boardDeboard=0&langFile=props.en-us"
 			#url = self.url_train_spot + self.response_json["train_number"] + "&journeyStn=" + self.response_json["station_code"] + "&langFile=props.en-us"
 
@@ -89,6 +89,7 @@ class PNRAPI:
 				train_status = soup.find('td', attrs={'id': 'qrdPosSttsMsg'})
 				
 				if train_status is None:
+					print("train_status is None")
 					return False
 
 				#check status and it should be "Yet to arrive"
