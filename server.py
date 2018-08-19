@@ -146,7 +146,7 @@ def currentISTTimeInUTC():
 	end = datetime.time(19, 00)
 	if now_time >= start and now_time <= end:
 	    print("Currently service unavailable. Indian Railway network is down from 11:30PM to 12:30AM.")
-	    return endConversation("Currently service unavailable. Indian Railway network is down from 11:30PM to 12:30AM.")
+	    return endConversation("Currently service unavailable, Indian railways network will be down every day from 11:30 PM to 12:30 AM.")
 	else:
 	    print("Sorry, your PNR number might be expired.")
 	    return endConversation("Sorry, either your PNR number might be expired or you can try again.")

@@ -13,6 +13,7 @@ class PNRAPI:
 
 		self.url_pnr = os.environ.get('PNR_URL')
 		self.url_train_spot = os.environ.get('ENQUIRY_URL')
+		self.url_start_source = os.environ.get('START_SOURCE_URL')
 		self.pnr = pnr
 		self.userId = userId
 
@@ -71,17 +72,40 @@ class PNRAPI:
 		print("Fetching running status...")
 		try:
 			exp_arrival_date = self.find_arrival_date()
-			arrival_date_formatted = datetime.strptime(str(exp_arrival_date), '%Y-%m-%d  %H:%M:%S').strftime('%d/%m/%Y')
-			boarding_date_formatted = datetime.strptime(self.response_json["boarding_date"], '%d-%m-%Y').strftime('%d/%m/%Y')
+			arrival_date_obj = datetime.strptime(str(exp_arrival_date), '%Y-%m-%d  %H:%M:%S')
+			arrival_date_formatted = arrival_date_obj.strftime('%d/%m/%Y')
+			#boarding_date_formatted = datetime.strptime(self.response_json["boarding_date"], '%d-%m-%Y').strftime('%d/%m/%Y')
 
 			self.response_json["arrival_date"] = unicode(arrival_date_formatted, "utf-8")
-			self.response_json["boarding_date"] = unicode(boarding_date_formatted, "utf-8")
+			#self.response_json["boarding_date"] = unicode(boarding_date_formatted, "utf-8")
+			
+			try:
+				print('Fetching start date of train from source...')
+				page = urllib2.urlopen(self.url_start_source + self.response_json["train_number"] + "&langFile=props.en-us")
+				soup = BeautifulSoup(page, 'html.parser')
+
+				train_detail = soup.find('div', attrs={'id': 'trainDetailDiv'}).select('div > script')[0].text
+
+				station_array = re.split('\r\n{|} ,', train_detail)
+				indices = [i for i, elem in enumerate(station_array) if 'stnCode:"'+ self.response_json["station_code"] +'"' in elem]
+
+				if len(indices) > 0:
+					dayCnt = station_array[indices[0]].split(',')[5].split(':')[1]
+					exp_start_date = arrival_date_obj - timedelta(int(dayCnt))
+					start_date_formatted = datetime.strptime(str(exp_start_date), '%Y-%m-%d  %H:%M:%S').strftime('%d/%m/%Y')
+					self.response_json["start_date"] = unicode(start_date_formatted, "utf-8")
+				else:
+					print("Station code not found in station_array")
+					return False
+
+			except Exception as e:
+				print(e)
+				return False
+
 			print(self.response_json)
-			url = self.url_train_spot + self.response_json["train_number"] + "&startDate=" + boarding_date_formatted + "&journeyStn=" + self.response_json["station_code"] + "&journeyDate=" + arrival_date_formatted + "&boardDeboard=0&langFile=props.en-us"
-			#url = self.url_train_spot + self.response_json["train_number"] + "&journeyStn=" + self.response_json["station_code"] + "&langFile=props.en-us"
 
 			try:
-				page = urllib2.urlopen(url)
+				page = urllib2.urlopen(self.url_train_spot + self.response_json["train_number"] + "&startDate=" + self.response_json["start_date"] + "&journeyStn=" + self.response_json["station_code"] + "&journeyDate=" + arrival_date_formatted + "&boardDeboard=0&langFile=props.en-us")
 				soup = BeautifulSoup(page, 'html.parser')
 
 				#remaining KMs to arrive and status of train at destination station
@@ -98,10 +122,11 @@ class PNRAPI:
 					print("Storing data in firestore...")
 					firestore.CloudFireStoreDB(self.get_json(), self.userId)
 					return True
+				else:
+					return None
 
-				return None
-			except urllib2.HTTPError as err:
-				print(err)
+			except Exception as e:
+				print(e)
 				return False
 
 		except Exception as e:
