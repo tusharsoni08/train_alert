@@ -60,11 +60,17 @@ def webhook():
 							isExpected = False
 
 				if len(pnr_number_str) == 10 and isExpected:
-					return processDetails(pnr_number_str, req_data['originalDetectIntentRequest']['payload']['user']['userId'])
+					#verify for update permission
+					try:
+						#when PNR request with permission
+						if req_data['originalDetectIntentRequest']['payload']['user']['permissions'] is not None:
+							return processDetails(pnr_number_str, req_data['originalDetectIntentRequest']['payload']['user']['userId'])
+					except Exception as e:
+						#when PNR request without permission
+						return askForPermission()
 				else:
 					return jsonify(fulfillmentText="PNR Number has to be of 10 digits")
 		else:
-			
 			#verify for update permission
 			try:
 				#PNR request with permission
