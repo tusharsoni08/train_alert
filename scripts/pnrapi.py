@@ -27,7 +27,13 @@ class PNRAPI:
 			pnr_data = soup.find('div', attrs={'class': 'pnr-search-result-info'})
 			
 			if pnr_data is None:
-				return 'Not Found'
+				# Hit again to verify that does PNR expired or previous request failed
+				page = urllib2.urlopen(self.url_pnr + self.pnr)
+				soup = BeautifulSoup(page, 'html.parser')
+				pnr_data = soup.find('div', attrs={'class': 'pnr-search-result-info'})
+
+				if pnr_data is None:
+					return 'Not Found'
 			
 			return self.set_pnr_details(pnr_data.text.split('\n\n'))
 		except urllib2.HTTPError as err:

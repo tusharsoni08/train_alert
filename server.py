@@ -69,7 +69,7 @@ def webhook():
 						#when PNR request without permission
 						return askForPermission()
 				else:
-					return jsonify(fulfillmentText="PNR Number has to be of 10 digits")
+					return jsonify(fulfillmentText="Your PNR number is not valid, Can you tell me your 10 digits PNR number again?")
 		else:
 			#verify for update permission
 			try:
@@ -83,7 +83,7 @@ def webhook():
 				return askForPermission()
 			
 	else:
-		return jsonify(fulfillmentText="Sorry, but I'm asking for PNR number")
+		return jsonify(fulfillmentText="Sorry, Could you please tell me your PNR number?")
 
 
 def askForPermission():
@@ -135,7 +135,7 @@ def processDetails(pnr, userId):
 
 	if response_status == True:
 		print("Okay, I've set the reminder. Enjoy your journey!")
-		return endConversation("Okay, I'll remind you before your train reaches the destination station. Enjoy your journey!")
+		return endConversation("Okay, I've set the reminder and will send you notification before your train reached the destination station. Enjoy your journey!")
 	elif response_status == None:
 		print("Sorry, your train has departed from your destination station.")
 		return endConversation("Sorry, your train has departed from your destination station.")
@@ -155,7 +155,7 @@ def currentISTTimeInUTC():
 	    return endConversation("Currently service unavailable, Indian railways network will be down every day from 11:30 PM to 12:30 AM.")
 	else:
 	    print("Sorry, your PNR number might be expired.")
-	    return endConversation("Sorry, either your PNR number might be expired or you can try again.")
+	    return endConversation("I'm sorry, your PNR number might be expired. This happens for PNR that have the date of departure 7 days ago.")
 
 
 if __name__ == '__main__':
