@@ -46,7 +46,7 @@ def webhook():
 			pnr_query = req_data['originalDetectIntentRequest']['payload']['inputs'][0]
 			if pnr_query['intent'] == 'actions.intent.TEXT' or pnr_query['intent'] == 'pnr_number':
 				text_data = pnr_query['arguments'][0]['textValue']
-				query_str = text_data.replace(" ", "")
+				query_str = text_data.replace(" ", "").replace("-", "")
 
 				numRegex = re.compile(r'\d{10}')
 				matched_result = numRegex.search(query_str)
